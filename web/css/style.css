@@ -1,0 +1,170 @@
+/* Main style sheet */
+
+/* Animations */
+@keyframes short-highlight {
+    from {background-color: rgb(175, 175, 175);}
+    to {background-color: #212529;}
+}
+
+@keyframes rotate360 {
+    to { transform: rotate(360deg); }
+}
+
+/* Search */
+#searchBar{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.searchItem{
+    min-height: 62px
+}
+
+.searchItem:hover{
+    background-color: #3a4147;
+    cursor: pointer;
+}
+
+.searchItem:active {
+    background-color: rgb(46, 46, 46);
+    cursor: pointer;
+}
+
+input[type=file]::file-selector-button {
+    display: none;
+}
+
+/* Filter and order */
+i, .order{
+    cursor: pointer;
+}
+
+.orderSimple{
+    width: 105px;
+    font-size: 13px;
+}
+
+#filterOptions{
+    transition: max-height 1s;
+    max-height: 0;
+}
+
+.final{
+    margin-right: 40px;
+}
+
+/* Games */
+.deals{
+    width: 455px;
+    margin-right: 70px;
+    margin-left: auto;
+}
+
+.container{
+    position: relative;
+}
+
+#resultList {
+    z-index: 10;
+}
+
+#info{
+    width: 100%;
+    position: absolute;
+    top: 225px;
+    z-index: -1;
+}
+
+.added{
+    background-color: white;
+    animation: 1.5s short-highlight;
+    animation-iteration-count: infinite;
+    animation-fill-mode: forwards;
+    -webkit-animation: 1.5s short-highlight;
+}
+
+#apps .gameInfo{
+    overflow: hidden;
+}
+
+.gameInfo .price{
+    width: 100px;
+}
+
+.list-group-item:hover{
+    cursor: pointer;
+}
+
+.list-group-item .gameInfo:hover{
+    cursor: default;
+}
+
+.list-group-item .gameInfo{
+    transition: max-height 1s;
+    max-height: 0;
+}
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    opacity: 0;
+    filter:alpha(opacity=0); /* IE support */
+}
+
+.price{
+    width: 100px;
+}
+
+.update-icon{
+    animation: 2s rotate360 infinite linear;
+}
+
+/* Other */
+#apps, #dataFilter, #info{
+    min-width: 875px
+}
+
+header, #searchBar{
+    min-width: 576px
+}
+
+.dropdown-center{
+    position: static;
+    overflow: visible !important;
+}
+
+.select2-search {
+    color: #dee2e6;
+    background-color: #212529 !important;
+}
+    /* Change the appearence of the search input field */
+    .select2-search input {
+        color: #dee2e6 !important;
+        background-color: #212529 !important;
+    }
+
+/* Change the appearence of the search results container */
+.select2-results {
+    color: #dee2e6 ;
+    background-color: #212529 !important;
+}
+
+/* Change the appearence of the dropdown select container */
+.select2-container--bootstrap-5 .select2-selection {
+    border-color: #6c757d !important;
+    color: #dee2e6 !important;
+    background-color: #212529 !important;
+
+    span{
+        color: #dee2e6 ;
+    }
+}
+
+/* Change the caret down arrow symbol to white */
+.select2-container--bootstrap-5 .select2-selection--single {
+    color: #dee2e6 ;
+}
+
+/* Change the color of the default selected item i.e. the first option */
+.select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
+    color: #dee2e6 !important;
+}

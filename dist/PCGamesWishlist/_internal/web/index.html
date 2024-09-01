@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html data-bs-theme="dark">
+    <head>
+        <title>PC Games Wishlist</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <link rel="icon" href="img/logo.png">
+
+        <!-- Bootstrap 5.3.3 -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        
+        <!-- Select 2 Bootstrap 5 -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
+        
+        <!-- Fontawesome CSS -->
+        <link rel="stylesheet" href="resources/fontawesome/css/all.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+        <!-- Include eel.js - note this file doesn't exist in the 'web' directory -->
+        <script type="text/javascript" src="/eel.js"></script>
+    </head>
+
+    <body>
+        <!-- Program info and Config -->
+        <header class="d-flex mx-2 mt-2">
+            <!-- Selected country -->
+            <span class="px-2 ms-2 mt-3 me-3" id="country"></span>
+
+            <!-- Last time the list was updated -->
+            <span class="px-2 mt-3 me-auto" id="updatetime"></span>
+
+            <div class="px-2 me-2 mt-2">
+                <!-- Update list -->
+                <button class="btn btn-outline-secondary text-light" onclick="updateList(this)" id="updatebutton">
+                    <span class="mr-3">Update list</span> 
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+
+                <!-- Config toggle -->
+                <button class="btn btn-outline-secondary text-light dropdown-toggle-split ms-2" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" id="configbutton">
+                    <i class="fa-solid fa-gear px-1"></i>
+                </button>
+                <ul class="dropdown-menu p-4" style="width: 450px;">
+                    <b>Configuration:</b>
+
+                    <!-- Country selection -->
+                    <div class="form-floating mt-4">
+                        <select class="form-select mb-4" id="formCountry" aria-label="Default select example"></select>
+                        <label for="formCountry" class="form-label">Country:</label>  
+                    </div>
+            
+                    <!-- Datapath folder selection -->
+                    <div class="form-control overflow-auto">
+                        <span>
+                            <button class="btn btn-outline-secondary text-light my-1" id="formFile">Change data folder:</button> 
+                        </span> 
+                        <span class="align-middle" id="formFilePath"></span> <!-- Current folder path -->
+                    </div>
+
+                    <!-- Switch input for updating list on startup -->
+                    <div class="form-check form-switch mt-3">
+                        <input class="form-check-input" type="checkbox" role="switch" id="formUpdate">
+                        <label class="form-check-label" for="formUpdate">Update list on start-up</label>
+                    </div>
+                </ul>
+            </div>
+        </header>
+
+        <div class="container mt-3 mb-5" id="searchBar">
+            <div class="card">
+                <div class="card-header d-flex">
+                    <!-- Game name input box -->
+                    <form target="_self" method="get" action="#" style="width: 100%;">
+                        <input class="form-control form-control-lg" id="searchInput" name="searchInput" type="text" placeholder="Enter app name here">
+                    </form>
+
+                    <!-- Search button -->
+                    <button class="btn mt-1 ms-2" id="searchButton" onclick="updateSearchList()">
+                        <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+                    </button>
+                </div>
+                
+                <!-- Search list -->
+                <div id="searchList"></div>
+            </div>
+            
+            <!-- Search status -->
+            <div id="searchResult"></div>
+        </div>
+
+        <div id="info">
+            <!-- Advanced filtering -->
+            <div id="filterOptions" style="max-height: 0px; overflow: hidden;">
+                <div class="mx-5 d-flex align-items-center p-3">
+                    <!-- Order by -->
+                    <h5 class="me-5 mt-1">Order by:</h5>
+
+                    <div class="me-5 fw-bold order" onclick="orderList(this, 'date')">
+                        Date
+                        <i></i>
+                    </div>
+
+                    <div class="me-5 fw-bold order" onclick="orderList(this, 'publisher')">
+                        Publisher
+                        <i></i>
+                    </div>
+
+                    <div class="me-5 fw-bold order" onclick="orderList(this, 'developer')">
+                        Developer
+                        <i></i>
+                    </div>
+
+                    <div class="ms-auto">
+                        <!-- Clear filters -->
+                        <button class="me-2 btn btn-outline-secondary text-light" id="clear" hidden onclick="clearFilter()">
+                            <span>Clear filters</span> 
+                            <i class="fa-solid fa-filter-circle-xmark"></i>
+                        </button>
+
+                        <!-- Filter list -->
+                        <button class="btn btn-outline-secondary text-light" id="filter" onclick="filterList()">
+                            <span>Filter list</span> 
+                            <i class="fa-solid fa-arrow-down-wide-short"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mx-5 d-flex">
+                    <div class="w-50 px-2">
+                        <!-- Select stores -->
+                        <div class="mb-4">
+                            <select class="form-select" id="filterStore" data-placeholder="Select a store" multiple></select>
+                        </div>
+
+                        <!-- Select tags -->
+                        <div class="mb-4">
+                            <select class="form-select" id="filterTag" data-placeholder="Select a tag" multiple></select>
+                        </div>
+
+                        <!-- Select publishers -->
+                        <div class="mb-4">
+                            <select class="form-select" id="filterPublisher" data-placeholder="Select a publisher" multiple></select>
+                        </div>
+
+                        <!-- Select developers -->
+                        <div class="mb-4">
+                            <select class="form-select" id="filterDeveloper" data-placeholder="Select a developer" multiple></select>
+                        </div>
+                        
+                        <div class="ms-1 mb-5">
+                            <!-- Released checkbox -->
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="checkReleased" checked>
+                                <label class="form-check-label" for="checkReleased">Released</label>
+                            </div>
+
+                            <!-- Not released checkbox -->
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="checkNotReleased" checked>
+                                <label class="form-check-label" for="checkNotReleased">Not released</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-50 px-2">
+                        <!-- Year options -->
+                        <div class="border rounded p-3 mb-2">
+                            <!-- Min. year range -->
+                            <label for="rangeYearMin" class="form-label" id="rangeYearMinLabel">Min. year:</label>
+                            <input type="range" class="form-range" id="rangeYearMin" value="0" min="0" max="0">
+
+                            <!-- Max. year range -->
+                            <label for="rangeYearMax" class="form-label" id="rangeYearMaxLabel">Max. year:</label>
+                            <input type="range" class="form-range" id="rangeYearMax" value="0" min="0" max="0">
+
+                            <!-- Games with no release date checkbox -->
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="checkNoReleaseDate" checked>
+                                <label class="form-check-label" for="checkNoReleaseDate">Games without a release date</label>
+                            </div>
+                        </div>
+
+                        <!-- Price options -->
+                        <div class="border rounded p-3 mb-5">
+                            <!-- Min. price -->
+                            <div class="form-floating mb-3">
+                                <input type="text" id="rangePriceMin" class="form-control">
+                                <label for="rangePriceMin" class="form-label" id="rangePriceMinLabel">Min. current price:</label>
+                            </div>
+
+                            <!-- Min. price -->
+                            <div class="form-floating mb-3">
+                                <input type="text" id="rangePriceMax" class="form-control">
+                                <label for="rangePriceMax" class="form-label" id="rangePriceMaxLabel">Max. current price:</label>
+                            </div>
+
+                            <form id="radioPrice">
+                                <!-- Current price radio -->
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="radioCurrent" value="current" checked>
+                                    <label class="form-check-label" for="radioCurrent">Current</label>
+                                </div>
+
+                                <!-- Regular price radio -->
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="radioRegular" value="regular">
+                                    <label class="form-check-label" for="radioRegular">Regular</label>
+                                </div>
+
+                                <!-- Lowest price radio -->
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="radioLowest" value="lowest">
+                                    <label class="form-check-label" for="radioLowest">Lowest</label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mx-5 mb-2 px-2" id="dataFilter">
+                <!-- Standard ordering -->
+                <div class="d-flex">
+                    <div class="me-auto fw-bold order orderSimple" onclick="orderList(this, 'name')">
+                        App Name:
+                        <i></i>
+                    </div>
+                    <div class="d-flex">
+                        <div class="fw-bold order orderSimple" onclick="orderList(this, 'current_price')">
+                            Current Price:
+                            <i></i>
+                        </div>
+                        <div class="fw-bold order orderSimple" onclick="orderList(this, 'regular_price')">
+                            Regular Price:
+                            <i></i>
+                        </div>
+                        <div class="fw-bold order orderSimple final" onclick="orderList(this, 'lowest_price')">
+                            Lowest Price:
+                            <i></i>
+                        </div>
+                    </div>
+
+                    <!-- Expand advanced filtering -->
+                    <i class="fa-solid fa-filter fa-lg mt-2" onclick="expandFilterOptions()"></i>
+                </div> 
+            </div> 
+
+            <!-- Game list -->
+            <div class="card mx-5 mb-4" id="apps"></div>
+        </div>
+
+        <!-- Bootstrap 5.3.3 -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        
+        <!-- Select 2 Bootstrap 5 -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <!-- Scripts -->
+        <script src="script/config_script.js"></script>
+        <script src="script/show_data.js"></script>
+        <script src="script/search_script.js"></script>
+        <script src="script/view_script.js"></script>
+    </body>
+</html>
