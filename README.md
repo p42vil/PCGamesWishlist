@@ -1,4 +1,4 @@
-# PC Games Wishlist ![plot](./img/logo.png) 
+# PC Games Wishlist ![plot](/img/logo.png) 
 
 PC Games Wishlist is a simple program done with Eel for making a game wishlist that incorporates multiple stores. It's an application that makes it more easy to find the best deal.
 
