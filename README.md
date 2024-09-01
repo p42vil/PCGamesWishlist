@@ -1,4 +1,6 @@
-# PC Games Wishlist ![plot](/img/logo.png) 
+# PC Games Wishlist 
+
+<img src="web/img/logo.png">
 
 PC Games Wishlist is a simple program done with Eel for making a game wishlist that incorporates multiple stores. It's an application that makes it more easy to find the best deal.
 
@@ -6,7 +8,9 @@ This program uses the **Is There Any Deal API** and the **Steam API** to get gam
 
 ## Usage
 
-![plot](./img/example.png) 
+The executable is inside the folder **dist**. You will need to keep the executable inside the same folder as **_internal** for the program to work.
+
+<img src="web/img/example.png" width="750">
 
 When starting, to add a game, enter the games' name on the input box, you can either click on :mag_right:, to search for the respective game or others with similar titles, then add it to the list, or you can more easily add it by pressing enter.
 
