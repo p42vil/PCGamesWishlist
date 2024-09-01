@@ -8,7 +8,7 @@ This program uses the **Is There Any Deal API** and the **Steam API** to get gam
 
 ## Usage
 
-The executable is inside the folder **dist**. You will need to keep the executable inside the same folder as **_internal** for the program to work.
+The [executable](https://github.com/p42vil/PCGamesWishlist/tree/app) is inside the folder **dist**. You will need to keep the executable inside the same folder as **_internal** for the program to work.
 
 <img src="web/img/example.png" width="750">
 
